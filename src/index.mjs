@@ -28,7 +28,7 @@ async function mintPrivateFunds(pxe) {
     const mintAmount = 20n;
     const secret = Fr.random();
     const secretHash = await computeSecretHash(secret);
-    const receipt = await token.methods.mint_private(mintAmount, secretHash).send().wait();
+    const receipt = await token.methods.mint_private(mintAmount, secretHash).send().wait({ debug: true });
 
     console.log(receipt)
     const storageSlot = token.artifact.storageLayout['pending_shields'].slot;
