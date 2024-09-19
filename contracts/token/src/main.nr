@@ -248,7 +248,7 @@ contract Token {
         let secret_hash = compute_secret_hash(secret);
 
         unsafe {
-            debug_log_format("get_2(storage hash:{0})", [secret_hash]);
+            debug_log_format("get_2(secret hash:{0})", [secret_hash]);
         }
 
         // Pop 1 note (set_limit(1)) which has an amount stored in a field with index 0 (select(0, amount)) and
