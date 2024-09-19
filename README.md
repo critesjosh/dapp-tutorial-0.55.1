@@ -1,5 +1,7 @@
 # Dapp Tutorial
 
+This repo was put together using the tutorial [here](https://docs.aztec.network/tutorials/codealong/simple_dapp) to address this [issue](https://github.com/AztecProtocol/dev-rel/issues/383).
+
 Use version 0.55.1 of the sandbox.
 
 ## Issues
