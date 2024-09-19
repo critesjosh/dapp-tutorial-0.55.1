@@ -32,6 +32,8 @@ contract Token {
         balance_set::BalanceSet
     };
 
+    use dep::aztec::oracle::debug_log::debug_log_format;
+
     // In the first transfer iteration we are computing a lot of additional information (validating inputs, retrieving
     // keys, etc.), so the gate count is already relatively high. We therefore only read a few notes to keep the happy
     // case with few constraints.
@@ -70,6 +72,10 @@ contract Token {
         storage.name.initialize(FieldCompressedString::from_string(name));
         storage.symbol.initialize(FieldCompressedString::from_string(symbol));
         storage.decimals.initialize(decimals);
+        debug_log_format(
+            "constructor(admin:{0}, name:{1}, symbol:{2}, decimals:{3})",
+            [admin.to_field(), name.to_field(), symbol.to_field(), decimals.to_field()]
+        );
     }
 
     #[aztec(public)]
@@ -240,6 +246,10 @@ contract Token {
     #[aztec(private)]
     fn redeem_shield(to: AztecAddress, amount: Field, secret: Field) {
         let secret_hash = compute_secret_hash(secret);
+
+        unsafe {
+            debug_log_format("get_2(storage hash:{0})", [secret_hash]);
+        }
 
         // Pop 1 note (set_limit(1)) which has an amount stored in a field with index 0 (select(0, amount)) and
         // a secret_hash stored in a field with index 1 (select(1, secret_hash)).

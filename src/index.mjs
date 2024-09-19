@@ -35,6 +35,11 @@ async function mintPrivateFunds(pxe) {
     const noteTypeId = token.artifact.notes['TransparentNote'].id;
 
     const note = new Note([new Fr(mintAmount), secretHash]);
+
+    console.log(`Note: ${note.toFriendlyJSON()}`);
+    console.log(`Storage slot: ${storageSlot}`);
+    console.log(`Note type id: ${noteTypeId}`);
+
     const extendedNote = new ExtendedNote(
         note,
         owner.getAddress(),
@@ -43,11 +48,13 @@ async function mintPrivateFunds(pxe) {
         noteTypeId,
         receipt.txHash,
     );
+
+    console.log(`Extended note: ${extendedNote.toString()}`);
     await pxe.addNote(extendedNote);
 
-    console.log(`Note added`);
     let notes = await pxe.getIncomingNotes({ owner: owner.getAddress() });
-    console.log(`Incoming notes: ${notes[0].note}`);
+
+    notes.map(note => console.log(`Incoming notes: ${note.note}`));
 
     let tx = await token.methods.redeem_shield(owner.getAddress(), mintAmount, secret).send().wait();
 
