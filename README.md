@@ -4,21 +4,25 @@ Use version 0.55.1 of the sandbox.
 
 ## Issues
 
-### DEBUG not working
+This repo demonstrates 2 issues with the sandbox.
+
+### 1. DEBUG not printing in the terminal
 
 I try starting the sandbox with `DEBUG` enabled (`DEBUG=* aztec start --sandbox`), but nothing is printed in the console when I run the constructor or when I call `redeem_shield`.
 
-@[debug statements in `constructor`](contracts/token/src/main.nr#L75-78)
+[debug statements in `constructor`](contracts/token/src/main.nr#L75-78)
 
-@[debug statements in `redeem_shield`](contracts/token/src/main.nr#L250-252)
+[debug statements in `redeem_shield`](contracts/token/src/main.nr#L250-252)
 
-### `redeem_shield` not working
+### 2. `redeem_shield` in the token contract not working
 
 Fails with error:
 
 ```
 Error in app: Error: (JSON-RPC PROPAGATED) Assertion failed: note not popped 'notes.len() == 1'
 ```
+
+This code referenced as part of the tutorial is no longer being tested in the monorepo CI, see it commented out [here](https://github.com/AztecProtocol/aztec-packages/blob/87e0a17db6c89a3a6e23fca3369c3bc5fe84ad3d/yarn-project/end-to-end/Earthfile#L277).
 
 To reproduce:
 
