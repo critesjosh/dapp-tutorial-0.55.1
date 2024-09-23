@@ -1,6 +1,7 @@
 import { getInitialTestAccountsWallets } from '@aztec/accounts/testing';
 import { ExtendedNote, Fr, Note, computeSecretHash, createPXEClient } from '@aztec/aztec.js';
 import { fileURLToPath } from '@aztec/foundation/url';
+// import { TokenContract } from '@aztec/noir-contracts.js/Token';
 
 import { getToken } from './contracts.mjs';
 
@@ -20,7 +21,7 @@ async function main() {
 
 
 async function mintPrivateFunds(pxe) {
-    const [owner] = await getInitialTestAccountsWallets(pxe);
+    const [owner, recipient] = await getInitialTestAccountsWallets(pxe);
     const token = await getToken(owner);
 
     await showPrivateBalances(pxe);
@@ -50,13 +51,13 @@ async function mintPrivateFunds(pxe) {
     );
 
     console.log(`Extended note: ${extendedNote.toString()}`);
-    await pxe.addNote(extendedNote);
+    await owner.addNote(extendedNote);
 
     let notes = await pxe.getIncomingNotes({ owner: owner.getAddress() });
 
     notes.map(note => console.log(`Incoming notes: ${note.note}`));
 
-    let tx = await token.methods.redeem_shield(owner.getAddress(), mintAmount, secret).send().wait();
+    let tx = await token.withWallet(owner).methods.redeem_shield(owner.getAddress(), mintAmount, secret).send().wait();
 
     console.log("redeemed shield", tx);
 
@@ -68,7 +69,7 @@ async function transferPrivateFunds(pxe) {
     const [owner, recipient] = await getInitialTestAccountsWallets(pxe);
     const token = await getToken(owner);
 
-    const tx = token.methods.transfer(owner.getAddress(), recipient.getAddress(), 1n, 0).send();
+    const tx = token.withWallet(owner).methods.transfer(recipient.getAddress(), 1n, 0).send();
     console.log(`Sent transfer transaction ${await tx.getTxHash()}`);
     await showPrivateBalances(pxe);
 
